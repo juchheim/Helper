@@ -1,0 +1,140 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Light gray background */
+    color: #01215b; /* Primary dark blue color */
+    margin: 0;
+    padding: 0;
+}
+
+.helper-form-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff; /* White background for forms */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+}
+
+h2 {
+    color: #01215b; /* Primary dark blue color */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+label {
+    font-weight: bold;
+    color: #01215b; /* Primary dark blue color */
+}
+
+.input, .button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #cccccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners for inputs */
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.button-primary {
+    background-color: #2e7c39; /* Green color */
+    color: #ffffff; /* White text */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-primary:hover {
+    background-color: #76e044; /* Lighter green on hover */
+}
+
+.toggle-link {
+    display: block;
+    text-align: center;
+    color: #2e7c39; /* Green color */
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.event {
+    background-color: #ffffff; /* White background for events */
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.event h4 {
+    margin-top: 0;
+    color: #01215b; /* Primary dark blue color */
+}
+
+.event p {
+    margin: 5px 0;
+}
+
+.event button,
+.edit-button {
+    background-color: #01215b; /* Primary dark blue color */
+    color: #ffffff; /* White text */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s ease;
+}
+
+.event button:hover,
+.edit-button:hover {
+    background-color: #2e7c39; /* Green color on hover */
+}
+
+.event-address {
+    padding: 10px;
+    background-color: #f0f0f0; /* Light gray background */
+    border-radius: 4px; /* Rounded corners */
+    margin-top: 10px;
+}
+
+/* Column Layout */
+.three-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.column {
+    flex: 1;
+    background-color: #ffffff; /* White background for columns */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+}
+
+/* Checkbox Container */
+.checkbox-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.checkbox-container label {
+    font-weight: bold;
+    color: #01215b; /* Primary dark blue color */
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.commit-checkbox {
+    margin-right: 8px; /* Add 8px space to the right of the checkbox */
+}
+
+.commit-label {
+    margin-left: 0; /* Ensure there's no additional margin on the left */
+}
+
+.entry-title { display: none; }
