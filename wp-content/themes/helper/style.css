@@ -473,7 +473,7 @@ big {
 --------------------------------------------- */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #e4fce0, #e0ebfc);
+    background: linear-gradient(to bottom, #e0ebfc, #e4fce0);
     color: #01215b; /* Primary dark blue color */
     margin: 0;
     padding: 0;
@@ -1010,4 +1010,15 @@ textarea {
 
 .site-branding {
 	padding-top:50px;
+}
+
+
+.site-footer .site-info {
+    text-align: center;
+    padding: 20px 0;
+    color: #01215b; /* White text color */
+}
+
+.site-footer .site-info p {
+    margin: 0;
 }
