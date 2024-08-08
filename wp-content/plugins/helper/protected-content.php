@@ -118,6 +118,7 @@
                     <p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-create-event" value="<?php esc_attr_e('Create Event'); ?>" /></p>
                 </form>
 
+
                 <?php
                 // Fetch events linked to the current organization
                 $events = pods('event', array(
@@ -271,7 +272,14 @@ jQuery(document).ready(function($) {
     $('#create-event-button').click(function(event) {
         event.preventDefault();
         console.log('Create Event button clicked');
-        $('#create-event-form').slideToggle();
+        var button = $(this);
+        $('#create-event-form').slideToggle(function() {
+            if ($('#create-event-form').is(':visible')) {
+                button.text('Close');
+            } else {
+                button.text('Create Event');
+            }
+        });
     });
 
 
