@@ -25,20 +25,7 @@
 <div id="page" class="site">
     <a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Skip to content', 'helper' ); ?></a>
 
-	
     <header id="masthead" class="site-header">
-   <!--     <nav id="site-navigation" class="main-navigation">
-            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"> --><?php // esc_html_e( 'Primary Menu', 'helper' ); ?><!--</button>
-            <?php
-         /*   wp_nav_menu(
-                array(
-                    'theme_location' => 'menu-1',
-                    'menu_id'        => 'primary-menu',
-                )
-            ); */
-            ?>
-        </nav>--><!-- #site-navigation -->
-
         <div class="site-branding">
             <?php
             the_custom_logo();
@@ -48,6 +35,10 @@
                 <p class="site-description"><?php echo $helper_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
             <?php endif; ?>
         </div><!-- .site-branding -->
+        
+        <?php if ( is_user_logged_in() ) : ?>
+            <a href="<?php echo wp_logout_url( home_url( '/' ) ); ?>" class="logout-button">Log Out</a>
+        <?php endif; ?>
     </header><!-- #masthead -->
 
     <div id="content" class="site-content">

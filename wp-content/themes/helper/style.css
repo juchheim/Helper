@@ -472,7 +472,11 @@ big {
 /* Elements
 --------------------------------------------- */
 body {
-	background: #fff;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #e4fce0, #e0ebfc);
+    color: #01215b; /* Primary dark blue color */
+    margin: 0;
+    padding: 0;
 }
 
 hr {
@@ -985,4 +989,25 @@ textarea {
 
 .site-title a, .site-description {
     display: block;
+}
+
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #01215b; /* Dark blue background */
+    color: #ffffff; /* White text */
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #76e044; /* Lighter green on hover */
+}
+
+.site-branding {
+	padding-top:50px;
 }

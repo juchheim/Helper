@@ -291,3 +291,13 @@ function display_events() {
     return ob_get_clean();
 }
 add_shortcode('display_events', 'display_events');
+
+function hide_admin_bar_for_roles() {
+    if (is_user_logged_in()) {
+        $user = wp_get_current_user();
+        if (in_array('volunteer', $user->roles) || in_array('organization', $user->roles)) {
+            add_filter('show_admin_bar', '__return_false');
+        }
+    }
+}
+add_action('after_setup_theme', 'hide_admin_bar_for_roles');
