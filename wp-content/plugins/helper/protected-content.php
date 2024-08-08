@@ -164,7 +164,7 @@
                             <?php if (!empty($committed_volunteers)) { ?>
                                 <p>Committed Volunteers: <?php echo esc_html(implode(', ', $committed_volunteers)); ?></p>
                             <?php } ?>
-                            <button class="delete-event-button" data-event-id="<?php echo esc_attr($event_id); ?>" data-nonce="<?php echo $nonce; ?>">Delete</button>
+                            <button class="delete-event-button red-button" data-event-id="<?php echo esc_attr($event_id); ?>" data-nonce="<?php echo $nonce; ?>">Delete</button>
                         </div>
                         <?php
                     }
