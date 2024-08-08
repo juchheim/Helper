@@ -115,7 +115,7 @@
                     </p>
                     <input type="hidden" name="user_role" value="organization" />
                     <?php wp_nonce_field('helper_create_event', 'helper_create_event_nonce'); ?>
-                    <p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e('Create Event'); ?>" /></p>
+                    <p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-create-event" value="<?php esc_attr_e('Create Event'); ?>" /></p>
                 </form>
 
                 <?php
