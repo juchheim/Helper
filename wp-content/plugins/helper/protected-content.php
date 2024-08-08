@@ -70,7 +70,8 @@
                 }
                 wp_nonce_field('helper_update', 'helper_update_nonce');
                 ?>
-                <p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e('Update'); ?>" /></p>
+                <p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary edit-submit" value="<?php esc_attr_e('Update'); ?>" /></p>
+
             </form>
         </div>
         <div class="column" id="middle-column">

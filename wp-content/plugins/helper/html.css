@@ -185,3 +185,20 @@ label {
 .info-button:hover {
     background-color: #2e7c39; /* Green color on hover */
 }
+
+.edit-submit {
+    background-color: #01215b !important; /* Dark blue background */
+    color: #ffffff !important; /* White text */
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px !important;
+    border-radius: 4px !important; /* Rounded corners */
+    transition: background-color 0.3s ease;
+    width: 100%; /* Ensure the button spans the width of its container */
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.edit-submit:hover {
+    background-color: #2e7c39 !important; /* Green color on hover */
+}
