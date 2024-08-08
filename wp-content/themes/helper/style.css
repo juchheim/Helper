@@ -967,3 +967,22 @@ textarea {
 	margin-right: auto;
 	margin-bottom: 1.5em;
 }
+
+
+.site-header {
+    text-align: center;
+    padding: 20px;
+}
+
+.main-navigation {
+    margin-bottom: 20px;
+}
+
+.site-branding {
+    display: inline-block;
+    text-align: center;
+}
+
+.site-title a, .site-description {
+    display: block;
+}
