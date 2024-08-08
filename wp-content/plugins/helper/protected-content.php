@@ -78,7 +78,7 @@
             if (in_array('organization', $user_roles)) {
                 ?>
                 <h3>My Events</h3>
-                <button id="create-event-button">Create Event</button>
+                <button id="create-event-button" class="edit-button">Create Event</button>
                 <form id="create-event-form" style="display: none;" method="post">
                     <p>
                         <label for="event_name"><?php _e('Event Name'); ?><br/>
@@ -150,11 +150,14 @@
                         ?>
                         <div class="event" data-event-id="<?php echo esc_attr($event_id); ?>">
                             <h4><?php echo esc_html($events->display('event_name')); ?></h4>
-                            <p><?php echo date('F j, Y \a\t g:ia', strtotime($events->display('event_date'))); ?></p>
-                            <p>Street: <?php echo esc_html($events->field('street')); ?></p>
-                            <p>City: <?php echo esc_html($events->field('city')); ?></p>
-                            <p>State: <?php echo esc_html($events->field('state')); ?></p>
-                            <p>Zip Code: <?php echo esc_html($events->field('zip_code')); ?></p>
+                            <p><?php echo esc_html(date('F j, Y \a\t g:i a', strtotime($events->display('event_date')))); ?></p>
+                            <button class="show-address-button" data-event-id="<?php echo esc_attr($event_id); ?>">Show Address</button>
+                            <div class="event-address" id="address-<?php echo esc_attr($event_id); ?>" style="display: none;">
+                                <p>Street: <?php echo esc_html($events->field('street')); ?></p>
+                                <p>City: <?php echo esc_html($events->field('city')); ?></p>
+                                <p>State: <?php echo esc_html($events->field('state')); ?></p>
+                                <p>Zip Code: <?php echo esc_html($events->field('zip_code')); ?></p>
+                            </div>
                             <p>Needs: <?php echo esc_html($events->display('event_needs')); ?></p>
                             <p>Positions available: <?php echo esc_html($events->display('positions')); ?></p>
                             <?php if (!empty($committed_volunteers)) { ?>
@@ -180,7 +183,7 @@
                             ?>
                             <div class="event">
                                 <h4><?php echo esc_html($events->display('event_name')); ?></h4>
-                                <p><?php echo date('F j, Y \a\t g:ia', strtotime($events->display('event_date'))); ?></p>
+                                <p><?php echo esc_html(date('F j, Y \a\t g:i a', strtotime($events->display('event_date')))); ?></p>
                                 <button class="show-address-button" data-event-id="<?php echo $events->id(); ?>">Show Address</button>
                                 <div class="event-address" id="address-<?php echo $events->id(); ?>" style="display: none;">
                                     <p>Street: <?php echo esc_html($events->field('street')); ?></p>
@@ -234,7 +237,6 @@ jQuery(document).ready(function($) {
                             'background-color': '#d4edda', // Light green background
                             'border-color': '#c3e6cb' // Green border
                         });
-                        checkbox.prop('disabled', true); // Disable the checkbox
                     } else {
                         alert(response.data);
                     }
@@ -255,18 +257,43 @@ jQuery(document).ready(function($) {
     $('#edit-pod-item').click(function(event) {
         event.preventDefault();
         var button = $(this);
-        var buttonText = button.text();
-        button.text(buttonText === 'My Information' ? 'Close' : 'My Information');
-        $('#edit-pod-form').slideToggle();
+        console.log('My Information button clicked');
+        $('#edit-pod-form').slideToggle(function() {
+            if ($('#edit-pod-form').is(':visible')) {
+                button.text('Close');
+            } else {
+                button.text('My Information');
+            }
+        });
     });
 
     $('#create-event-button').click(function(event) {
         event.preventDefault();
         console.log('Create Event button clicked');
         $('#create-event-form').slideToggle();
-        var buttonText = $(this).text();
-        $(this).text(buttonText === 'Create Event' ? 'Cancel' : 'Create Event');
     });
+
+
+// Add event listeners for show address buttons
+$('.show-address-button').off('click').on('click', function(event) {
+    event.preventDefault();
+    console.log('Show Address button clicked');
+    var eventId = $(this).data('event-id');
+    var addressDiv = $('#address-' + eventId);
+    var button = $(this);
+
+    // Slide toggle and update button text based on visibility
+    addressDiv.stop(true, true).slideToggle(400, function() {
+        if (addressDiv.is(':visible')) {
+            button.text('Hide Address');
+        } else {
+            button.text('Show Address');
+        }
+    });
+});
+
+
+
 
     $('.delete-event-button').click(function(event) {
         event.preventDefault();
@@ -317,7 +344,7 @@ jQuery(document).ready(function($) {
                         eventsHtml += '<div style="float: right;"><input type="checkbox" id="commit-' + i + '" class="commit-checkbox" data-event-id="' + events[i].event_id + '" data-volunteer-id="' + helperAjax.volunteer_id + '"' + (events[i].is_registered ? ' checked disabled' : '') + '><label for="commit-' + i + '" class="commit-label">' + (events[i].is_registered ? 'Committed' : 'Commit') + '</label></div>';
                     }
                     eventsHtml += '<h4>' + events[i].event_name + '</h4>';
-                    eventsHtml += '<p>' + dateFormat(events[i].event_date) + '</p>';
+                    eventsHtml += '<p>' + new Date(events[i].event_date).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) + '</p>';
                     eventsHtml += '<button class="show-address-button" data-event-id="' + events[i].event_id + '">Show Address</button>';
                     eventsHtml += '<div class="event-address" id="address-' + events[i].event_id + '" style="display: none;">';
                     eventsHtml += '<p>Street: ' + events[i].street + '</p>';
@@ -379,37 +406,11 @@ jQuery(document).ready(function($) {
                         });
                     }
                 });
-
-                // Add event listeners for show address buttons
-                $('.show-address-button').click(function() {
-                    var eventId = $(this).data('event-id');
-                    var addressDiv = $('#address-' + eventId);
-                    addressDiv.slideToggle();
-                    var button = $(this);
-                    if (button.text() === 'Show Address') {
-                        button.text('Hide Address');
-                    } else {
-                        button.text('Show Address');
-                    }
-                });
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', error);
             }
         });
-    }
-
-    function dateFormat(dateString) {
-        var date = new Date(dateString);
-        var options = { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric', 
-            hour: 'numeric', 
-            minute: 'numeric',
-            hour12: true
-        };
-        return date.toLocaleString('en-US', options);
     }
 
     $('#show_related').change(function() {
@@ -448,7 +449,14 @@ jQuery(document).ready(function($) {
                     for (var j = 0; j < content.events.length; j++) {
                         eventContentHtml += '<div class="event">';
                         eventContentHtml += '<h4>' + content.events[j].event_name + '</h4>';
-                        eventContentHtml += '<p>' + dateFormat(content.events[j].event_date) + '</p>';
+                        eventContentHtml += '<p>' + new Date(content.events[j].event_date).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) + '</p>';
+                        eventContentHtml += '<button class="show-address-button" data-event-id="' + content.events[j].event_id + '">Show Address</button>';
+                        eventContentHtml += '<div class="event-address" id="address-' + content.events[j].event_id + '" style="display: none;">';
+                        eventContentHtml += '<p>Street: ' + content.events[j].street + '</p>';
+                        eventContentHtml += '<p>City: ' + content.events[j].city + '</p>';
+                        eventContentHtml += '<p>State: ' + content.events[j].state + '</p>';
+                        eventContentHtml += '<p>Zip Code: ' + content.events[j].zip_code + '</p>';
+                        eventContentHtml += '</div>';
                         eventContentHtml += '<p>Needs: ' + content.events[j].event_needs + '</p>';
                         eventContentHtml += '</div>';
                     }

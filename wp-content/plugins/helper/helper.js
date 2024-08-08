@@ -28,8 +28,8 @@ jQuery(document).ready(function($) {
                         minute: 'numeric',
                         hour12: true
                     });
-                    eventsHtml += '<p>Date: ' + formattedDate + '</p>';
-                    eventsHtml += '<button class="show-address-button" data-event-id="' + events[i].event_id + '">Show Address</button>';
+                    eventsHtml += '<p>' + formattedDate + '</p>';
+                    eventsHtml += '<button class="show-address-button-volunteer" data-event-id="' + events[i].event_id + '">Show Address</button>';
                     eventsHtml += '<div class="event-address" id="address-' + events[i].event_id + '" style="display: none;">';
                     eventsHtml += '<p>Street: ' + events[i].street + '</p>';
                     eventsHtml += '<p>City: ' + events[i].city + '</p>';
@@ -106,17 +106,33 @@ jQuery(document).ready(function($) {
                     }
                 });
 
-                // Add event listeners for show address buttons
-                $('.show-address-button').click(function() {
+                // Add event listeners for volunteer show address buttons
+                $('.show-address-button-volunteer').off('click').on('click', function(event) {
+                    event.preventDefault();
+                    console.log('Volunteer Show Address button clicked');
                     var eventId = $(this).data('event-id');
                     var addressDiv = $('#address-' + eventId);
-                    addressDiv.slideToggle();
                     var button = $(this);
-                    if (button.text() === 'Show Address') {
-                        button.text('Hide Address');
-                    } else {
-                        button.text('Show Address');
-                    }
+
+                    addressDiv.stop(true, true).slideToggle({
+                        duration: 400,
+                        start: function() {
+                            console.log('Slide toggle started');
+                            if (addressDiv.is(':visible')) {
+                                button.text('Show Address');
+                            } else {
+                                button.text('Hide Address');
+                            }
+                        },
+                        complete: function() {
+                            console.log('Slide toggle completed');
+                            if (addressDiv.is(':visible')) {
+                                button.text('Hide Address');
+                            } else {
+                                button.text('Show Address');
+                            }
+                        }
+                    });
                 });
             },
             error: function(xhr, status, error) {
@@ -134,4 +150,33 @@ jQuery(document).ready(function($) {
 
     // Initial fetch with show_related as false
     fetchEvents(false);
+
+    // Add event listeners for organization show address buttons
+    $('.show-address-button-organization').off('click').on('click', function(event) {
+        event.preventDefault();
+        console.log('Organization Show Address button clicked');
+        var eventId = $(this).data('event-id');
+        var addressDiv = $('#address-' + eventId);
+        var button = $(this);
+
+        addressDiv.stop(true, true).slideToggle({
+            duration: 400,
+            start: function() {
+                console.log('Slide toggle started');
+                if (addressDiv.is(':visible')) {
+                    button.text('Show Address');
+                } else {
+                    button.text('Hide Address');
+                }
+            },
+            complete: function() {
+                console.log('Slide toggle completed');
+                if (addressDiv.is(':visible')) {
+                    button.text('Hide Address');
+                } else {
+                    button.text('Show Address');
+                }
+            }
+        });
+    });
 });
