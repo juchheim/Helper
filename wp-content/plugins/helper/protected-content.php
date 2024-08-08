@@ -171,22 +171,24 @@
                     <?php
                     // Initial fetch of all events
                     $events = pods('event');
+                    $events = pods('event');
                     $events->find();
                     if ($events->total() > 0) {
                         while ($events->fetch()) {
                             $event_id = $events->id();
                             $event_name = $events->display('event_name');
-                            $event_date = $events->display('event_date');
+                            $event_date = $events->field('event_date');
+                            $formatted_event_date = date('F j, Y \a\t g:ia', strtotime($event_date)); // Format the date
                             $street = $events->field('street');
                             $city = $events->field('city');
                             $state = $events->field('state');
                             $zip_code = $events->field('zip_code');
 
-                            error_log("Event ID: $event_id, Event Name: $event_name, Event Date: $event_date, Street: $street, City: $city, State: $state, Zip Code: $zip_code");
+                            error_log("Event ID: $event_id, Event Name: $event_name, Event Date: $formatted_event_date, Street: $street, City: $city, State: $state, Zip Code: $zip_code");
                             ?>
                             <div class="event">
                                 <h4><?php echo esc_html($event_name); ?></h4>
-                                <p>Date: <?php echo esc_html($event_date); ?></p>
+                                <p>Date: <?php echo esc_html($formatted_event_date); ?></p>
                                 <button class="show-address-button" data-event-id="<?php echo esc_attr($event_id); ?>">Show Address</button>
                                 <div class="event-address" id="address-<?php echo esc_attr($event_id); ?>" style="display: none;">
                                     <p>Street: <?php echo esc_html($street); ?></p>

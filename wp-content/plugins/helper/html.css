@@ -138,3 +138,33 @@ label {
 }
 
 .entry-title { display: none; }
+
+#edit-pod-item {
+    color: white;
+}
+
+#edit-pod-item {
+    background-color: #01215b; /* blue color */
+    color: #ffffff; /* White text */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#edit-pod-item:hover {
+    background-color: #2e7c39; /* green on hover */
+}
+
+.styled-button {
+    background-color: #01215b; /* Primary dark blue color */
+    color: #ffffff; /* White text */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s ease;
+}
+
+.styled-button:hover {
+    background-color: #2e7c39; /* Green color on hover */
+}

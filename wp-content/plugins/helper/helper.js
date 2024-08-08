@@ -1,19 +1,4 @@
 jQuery(document).ready(function($) {
-    // Add event listeners for show address buttons
-    $(document).on('click', '.show-address-button', function() {
-        var eventId = $(this).data('event-id');
-        var addressDiv = $('#address-' + eventId);
-        console.log('Toggling address for event ID:', eventId);
-        console.log('Address div before toggle:', addressDiv.html());
-        addressDiv.slideToggle();
-        var button = $(this);
-        if (button.text() === 'Show Address') {
-            button.text('Hide Address');
-        } else {
-            button.text('Show Address');
-        }
-        console.log('Address div after toggle:', addressDiv.html());
-    });
     function fetchEvents(showRelated) {
         console.log('Fetching events, showRelated:', showRelated);
         $.ajax({
@@ -34,7 +19,16 @@ jQuery(document).ready(function($) {
                         eventsHtml += '<div style="float: right;"><input type="checkbox" id="commit-' + i + '" class="commit-checkbox" data-event-id="' + events[i].event_id + '" data-volunteer-id="' + helperAjax.volunteer_id + '"' + (events[i].is_registered ? ' checked disabled' : '') + '><label for="commit-' + i + '" class="commit-label">' + (events[i].is_registered ? 'Committed' : 'Commit') + '</label></div>';
                     }
                     eventsHtml += '<h4>' + events[i].event_name + '</h4>';
-                    eventsHtml += '<p>Date: ' + events[i].event_date + '</p>';
+                    var eventDate = new Date(events[i].event_date);
+                    var formattedDate = eventDate.toLocaleString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    });
+                    eventsHtml += '<p>Date: ' + formattedDate + '</p>';
                     eventsHtml += '<button class="show-address-button" data-event-id="' + events[i].event_id + '">Show Address</button>';
                     eventsHtml += '<div class="event-address" id="address-' + events[i].event_id + '" style="display: none;">';
                     eventsHtml += '<p>Street: ' + events[i].street + '</p>';
@@ -54,7 +48,7 @@ jQuery(document).ready(function($) {
                 }
                 $('#events-container').html(eventsHtml);
 
-                // Re-attach event listeners after new content is loaded
+                // Add event listeners for commit checkboxes
                 $('.commit-checkbox').change(function() {
                     var checkbox = $(this);
                     var label = checkbox.next('label.commit-label');
@@ -109,6 +103,19 @@ jQuery(document).ready(function($) {
                             'background-color': '',
                             'border-color': ''
                         });
+                    }
+                });
+
+                // Add event listeners for show address buttons
+                $('.show-address-button').click(function() {
+                    var eventId = $(this).data('event-id');
+                    var addressDiv = $('#address-' + eventId);
+                    addressDiv.slideToggle();
+                    var button = $(this);
+                    if (button.text() === 'Show Address') {
+                        button.text('Hide Address');
+                    } else {
+                        button.text('Show Address');
                     }
                 });
             },
