@@ -168,3 +168,20 @@ label {
 .styled-button:hover {
     background-color: #2e7c39; /* Green color on hover */
 }
+
+
+/* Add this CSS for the info button styling */
+.info-button {
+    background-color: #01215b; /* Dark blue background */
+    color: #ffffff; /* White text */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px; /* Add space at the bottom */
+}
+
+.info-button:hover {
+    background-color: #2e7c39; /* Green color on hover */
+}
