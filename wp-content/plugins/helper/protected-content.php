@@ -33,7 +33,7 @@
             }
             ?>
             <p><?php echo esc_html($first_name) . ' ' . esc_html($last_name) . esc_html($organization_name); ?></p>
-            <button id="edit-pod-item">Edit</button>
+            <button id="edit-pod-item" class="edit-button">My Information</button>
             <form id="edit-pod-form" style="display: none;" method="post">
                 <?php
                 $skills = get_user_meta($user_id, 'skills', true);
@@ -96,7 +96,6 @@
                         <label for="positions"><?php _e('Positions Available'); ?><br/>
                         <input type="number" name="positions" id="positions" class="input" size="25" /></label>
                     </p>
-                    <!-- Add new fields for address -->
                     <p>
                         <label for="street"><?php _e('Street'); ?><br/>
                         <input type="text" name="street" id="street" class="input" size="25" /></label>
@@ -151,7 +150,11 @@
                         ?>
                         <div class="event" data-event-id="<?php echo esc_attr($event_id); ?>">
                             <h4><?php echo esc_html($events->display('event_name')); ?></h4>
-                            <p>Date: <?php echo esc_html($events->display('event_date')); ?></p>
+                            <p><?php echo date('F j, Y \a\t g:ia', strtotime($events->display('event_date'))); ?></p>
+                            <p>Street: <?php echo esc_html($events->field('street')); ?></p>
+                            <p>City: <?php echo esc_html($events->field('city')); ?></p>
+                            <p>State: <?php echo esc_html($events->field('state')); ?></p>
+                            <p>Zip Code: <?php echo esc_html($events->field('zip_code')); ?></p>
                             <p>Needs: <?php echo esc_html($events->display('event_needs')); ?></p>
                             <p>Positions available: <?php echo esc_html($events->display('positions')); ?></p>
                             <?php if (!empty($committed_volunteers)) { ?>
@@ -171,32 +174,22 @@
                     <?php
                     // Initial fetch of all events
                     $events = pods('event');
-                    $events = pods('event');
-                $events->find();
-                if ($events->total() > 0) {
-                    while ($events->fetch()) {
-                        $event_id = $events->id();
-                        $event_name = $events->display('event_name');
-                        $event_date = $events->field('event_date');
-                        $formatted_event_date = date('F j, Y \a\t g:ia', strtotime($event_date)); // Format the date
-                        $street = $events->field('street');
-                        $city = $events->field('city');
-                        $state = $events->field('state');
-                        $zip_code = $events->field('zip_code');
-
-                        error_log("Event ID: $event_id, Event Name: $event_name, Event Date: $formatted_event_date, Street: $street, City: $city, State: $state, Zip Code: $zip_code");
-                        ?>
-                        <div class="event">
-                            <h4><?php echo esc_html($event_name); ?></h4>
-                            <p>Date: <?php echo esc_html($formatted_event_date); ?></p>
-                            <button class="show-address-button" data-event-id="<?php echo esc_attr($event_id); ?>">Show Address</button>
-                            <div class="event-address" id="address-<?php echo esc_attr($event_id); ?>" style="display: none;">
-                                <p>Street: <?php echo esc_html($street); ?></p>
-                                <p>City: <?php echo esc_html($city); ?></p>
-                                <p>State: <?php echo esc_html($state); ?></p>
-                                <p>Zip Code: <?php echo esc_html($zip_code); ?></p>
+                    $events->find();
+                    if ($events->total() > 0) {
+                        while ($events->fetch()) {
+                            ?>
+                            <div class="event">
+                                <h4><?php echo esc_html($events->display('event_name')); ?></h4>
+                                <p><?php echo date('F j, Y \a\t g:ia', strtotime($events->display('event_date'))); ?></p>
+                                <button class="show-address-button" data-event-id="<?php echo $events->id(); ?>">Show Address</button>
+                                <div class="event-address" id="address-<?php echo $events->id(); ?>" style="display: none;">
+                                    <p>Street: <?php echo esc_html($events->field('street')); ?></p>
+                                    <p>City: <?php echo esc_html($events->field('city')); ?></p>
+                                    <p>State: <?php echo esc_html($events->field('state')); ?></p>
+                                    <p>Zip Code: <?php echo esc_html($events->field('zip_code')); ?></p>
+                                </div>
+                                <p>Needs: <?php echo esc_html($events->display('event_needs')); ?></p>
                             </div>
-                        </div>
                             <?php
                         }
                     } else {
@@ -259,10 +252,11 @@ jQuery(document).ready(function($) {
         }
     });
 
-
     $('#edit-pod-item').click(function(event) {
         event.preventDefault();
-        console.log('Edit button clicked');
+        var button = $(this);
+        var buttonText = button.text();
+        button.text(buttonText === 'My Information' ? 'Close' : 'My Information');
         $('#edit-pod-form').slideToggle();
     });
 
@@ -270,6 +264,8 @@ jQuery(document).ready(function($) {
         event.preventDefault();
         console.log('Create Event button clicked');
         $('#create-event-form').slideToggle();
+        var buttonText = $(this).text();
+        $(this).text(buttonText === 'Create Event' ? 'Cancel' : 'Create Event');
     });
 
     $('.delete-event-button').click(function(event) {
@@ -321,10 +317,15 @@ jQuery(document).ready(function($) {
                         eventsHtml += '<div style="float: right;"><input type="checkbox" id="commit-' + i + '" class="commit-checkbox" data-event-id="' + events[i].event_id + '" data-volunteer-id="' + helperAjax.volunteer_id + '"' + (events[i].is_registered ? ' checked disabled' : '') + '><label for="commit-' + i + '" class="commit-label">' + (events[i].is_registered ? 'Committed' : 'Commit') + '</label></div>';
                     }
                     eventsHtml += '<h4>' + events[i].event_name + '</h4>';
-                    eventsHtml += '<p>Organization: ' + (events[i].organization_name ? events[i].organization_name : 'N/A') + '</p>';
-                    eventsHtml += '<p>Date: ' + events[i].event_date + '</p>';
+                    eventsHtml += '<p>' + dateFormat(events[i].event_date) + '</p>';
+                    eventsHtml += '<button class="show-address-button" data-event-id="' + events[i].event_id + '">Show Address</button>';
+                    eventsHtml += '<div class="event-address" id="address-' + events[i].event_id + '" style="display: none;">';
+                    eventsHtml += '<p>Street: ' + events[i].street + '</p>';
+                    eventsHtml += '<p>City: ' + events[i].city + '</p>';
+                    eventsHtml += '<p>State: ' + events[i].state + '</p>';
+                    eventsHtml += '<p>Zip Code: ' + events[i].zip_code + '</p>';
+                    eventsHtml += '</div>';
                     eventsHtml += '<p>Needs: ' + events[i].event_needs + '</p>';
-                    eventsHtml += '<p>Positions: ' + events[i].positions + '</p>';
                     eventsHtml += '</div>';
                 }
                 $('#events-container').html(eventsHtml);
@@ -338,9 +339,6 @@ jQuery(document).ready(function($) {
                     var volunteerId = checkbox.data('volunteer-id');
                     var eventId = checkbox.data('event-id');
 
-                    console.log('Checkbox volunteer ID:', volunteerId);
-                    console.log('Checkbox event ID:', eventId);
-
                     if (checkbox.is(':checked')) {
                         // Confirm before proceeding
                         var confirmed = confirm("Are you sure you want to commit to this event?");
@@ -349,7 +347,6 @@ jQuery(document).ready(function($) {
                             return;
                         }
 
-                        console.log('Checkbox is checked, sending AJAX request to register volunteer.');
                         $.ajax({
                             url: helperAjax.ajaxurl,
                             method: 'POST',
@@ -359,7 +356,6 @@ jQuery(document).ready(function($) {
                                 event_id: eventId
                             },
                             success: function(response) {
-                                console.log('Registration response:', response);
                                 if (response.success) {
                                     label.text('Committed');
                                     eventDiv.css({
@@ -368,14 +364,11 @@ jQuery(document).ready(function($) {
                                     });
                                     checkbox.prop('disabled', true); // Disable the checkbox
                                 } else {
-                                    console.log('Failed to fetch titles:', response.data);
+                                    alert(response.data);
                                 }
                             },
                             error: function(xhr, status, error) {
                                 console.error('AJAX error:', error);
-                                console.log('XHR:', xhr);
-                                console.log('Status:', status);
-                                console.log('Error:', error);
                             }
                         });
                     } else {
@@ -386,14 +379,37 @@ jQuery(document).ready(function($) {
                         });
                     }
                 });
+
+                // Add event listeners for show address buttons
+                $('.show-address-button').click(function() {
+                    var eventId = $(this).data('event-id');
+                    var addressDiv = $('#address-' + eventId);
+                    addressDiv.slideToggle();
+                    var button = $(this);
+                    if (button.text() === 'Show Address') {
+                        button.text('Hide Address');
+                    } else {
+                        button.text('Show Address');
+                    }
+                });
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', error);
-                console.log('XHR:', xhr);
-                console.log('Status:', status);
-                console.log('Error:', error);
             }
         });
+    }
+
+    function dateFormat(dateString) {
+        var date = new Date(dateString);
+        var options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            hour: 'numeric', 
+            minute: 'numeric',
+            hour12: true
+        };
+        return date.toLocaleString('en-US', options);
     }
 
     $('#show_related').change(function() {
@@ -432,7 +448,7 @@ jQuery(document).ready(function($) {
                     for (var j = 0; j < content.events.length; j++) {
                         eventContentHtml += '<div class="event">';
                         eventContentHtml += '<h4>' + content.events[j].event_name + '</h4>';
-                        eventContentHtml += '<p>Date: ' + content.events[j].event_date + '</p>';
+                        eventContentHtml += '<p>' + dateFormat(content.events[j].event_date) + '</p>';
                         eventContentHtml += '<p>Needs: ' + content.events[j].event_needs + '</p>';
                         eventContentHtml += '</div>';
                     }
